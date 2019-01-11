@@ -61,7 +61,7 @@ it will run without the need for any dependency.
 If you want to compile the source yourself follow the instructions on one of these wiki pages: 
 * [Linux](https://github.com/alexrj/Slic3r/wiki/Running-Slic3r-from-git-on-GNU-Linux)
 * [Windows](https://github.com/prusa3d/Slic3r/wiki/How-to-compile-Slic3r-Prusa-Edition-on-MS-Windows)
-* [Mac OSX](https://github.com/alexrj/Slic3r/wiki/Running-Slic3r-from-git-on-OS-X)
+* [Mac OSX](https://github.com/prusa3d/Slic3r/blob/master/doc/How%20to%20build%20-%20Mac%20OS.md)
 
 ### Can I help?
 
