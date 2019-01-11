@@ -3,6 +3,8 @@
 #include "GUI_ObjectManipulation.hpp"
 #include "I18N.hpp"
 
+#include <iostream>   // XXX: tmp
+
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -406,16 +408,19 @@ void GUI_App::CallAfter(std::function<void()> cb)
 
 void GUI_App::window_pos_save(wxTopLevelWindow* window, const std::string &name)
 {
+    std::cerr << "window_pos_save: " << window << ", name: " << name << std::endl;
     if (name.empty()) { return; }
     const auto config_key = (boost::format("window_%1%") % name).str();
 
     WindowMetrics metrics = WindowMetrics::from_window(window);
+    std::cerr << "\tmetrics: " << metrics << std::endl;
     app_config->set(config_key, metrics.serialize());
     app_config->save();
 }
 
 void GUI_App::window_pos_restore(wxTopLevelWindow* window, const std::string &name)
 {
+    std::cerr << "window_pos_restore: " << window << ", name: " << name << std::endl;
     if (name.empty()) { return; }
     const auto config_key = (boost::format("window_%1%") % name).str();
 
@@ -428,16 +433,26 @@ void GUI_App::window_pos_restore(wxTopLevelWindow* window, const std::string &na
     window->Maximize(metrics->get_maximized());
 }
 
+static std::string rect2string(const wxRect &rect)
+{
+    return (boost::format("[%1%, %2%, %3%, %4%]") % rect.x % rect.y % rect.width % rect.height).str();
+}
+
 void GUI_App::window_pos_sanitize(wxTopLevelWindow* window)
 {
+    std::cerr << "window_pos_sanitize: " << window << std::endl;
     const auto display_idx = wxDisplay::GetFromWindow(window);
+    std::cerr << "\tdisplay_idx: " << display_idx << std::endl;
     if (display_idx == wxNOT_FOUND) { return; }
 
     const auto display = wxDisplay(display_idx).GetClientArea();
+    std::cerr << "\tdisplay client area: " << rect2string(display) << std::endl;
 
     auto metrics = WindowMetrics::from_window(window);
+    std::cerr << "\tmetrics: " << metrics << std::endl;
 
     metrics.sanitize_for_display(display);
+    std::cerr << "\tmetrics sanitized: " << metrics << std::endl;
     if (window->GetScreenRect() != metrics.get_rect()) {
         window->SetSize(metrics.get_rect());
     }
